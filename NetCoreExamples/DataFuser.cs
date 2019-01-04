@@ -25,7 +25,7 @@ namespace NetCoreExamples {
 
                 // accelerometer is the source input, index 0
                 // gyro name is first input, index 1
-                Console.WriteLine($"acc = {array[0].Value<Acceleration>()}, gyro = {array[1].Value<Acceleration>()}");
+                Console.WriteLine($"acc = {array[0].Value<Acceleration>()}, gyro = {array[1].Value<AngularVelocity>()}");
             }));
 
             gyro.AngularVelocity.Start();

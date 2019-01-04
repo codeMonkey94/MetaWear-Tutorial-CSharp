@@ -42,7 +42,7 @@ namespace NetCoreExamples {
                 acc.Start();
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(30000);
 
             await Task.WhenAll(metawears.Select(_ => {
                 var acc = _.GetModule<IAccelerometer>();
