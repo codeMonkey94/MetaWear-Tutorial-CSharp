@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarterApp", "StarterApp\St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeGraph", "RealTimeGraph\RealTimeGraph.csproj", "{75BB2D79-7921-46FC-B41A-0DFCCBE14112}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreExamples", "NetCoreExamples\NetCoreExamples.csproj", "{8D727A85-445B-407B-A436-A871B6B428CB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		BtleDeviceScanner\BtleDeviceScanner.projitems*{109d4431-95c2-439b-9595-575e06db74fd}*SharedItemsImports = 4
@@ -89,6 +91,22 @@ Global
 		{75BB2D79-7921-46FC-B41A-0DFCCBE14112}.Release|x86.ActiveCfg = Release|x86
 		{75BB2D79-7921-46FC-B41A-0DFCCBE14112}.Release|x86.Build.0 = Release|x86
 		{75BB2D79-7921-46FC-B41A-0DFCCBE14112}.Release|x86.Deploy.0 = Release|x86
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|x64.Build.0 = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Debug|x86.Build.0 = Debug|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|ARM.Build.0 = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|x64.Build.0 = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D727A85-445B-407B-A436-A871B6B428CB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
