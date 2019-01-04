@@ -8,11 +8,7 @@ using MbientLab.MetaWear.NetStandard;
 
 namespace NetCoreExamples {
     class ScanConnect {
-        static void Main(string[] args) {
-            MainAsync(args).Wait();
-        }
-
-        private static async Task MainAsync(string[] args) {
+        static async Task Setup(string[] args) {
             int selection = -1;
             List<ScanResult> devices = new List<ScanResult>();
 

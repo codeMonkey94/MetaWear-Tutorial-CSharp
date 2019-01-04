@@ -10,11 +10,7 @@ using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class StreamAccelerometer {
-        static void Main(string[] args) {
-            MainAsync(args).Wait();
-        }
-
-        private static async Task MainAsync(string[] args) {
+        static async Task Setup(string[] args) {
             var metawears = new List<IMetaWearBoard>();
             var samples = new Dictionary<IMetaWearBoard, uint>();
 

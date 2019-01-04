@@ -6,11 +6,7 @@ using MbientLab.MetaWear.Peripheral.Led;
 
 namespace NetCoreExamples {
     class Led {
-        static void Main(string[] args) {
-            MainAsync(args).Wait();
-        }
-
-        private static async Task MainAsync(string[] args) {
+        static async Task Setup(string[] args) {
             var metawear = Application.GetMetaWearBoard(args[0]);
             await metawear.InitializeAsync();
 

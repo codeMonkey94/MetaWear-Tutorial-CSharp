@@ -8,11 +8,7 @@ using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class DataFuser {
-        static void Main(string[] args) {
-            MainAsync(args).Wait();
-        }
-
-        private static async Task MainAsync(string[] args) {
+        static async Task Setup(string[] args) {
             Console.WriteLine($"Connecting to {args[0]}...");
 
             var metawear = Application.GetMetaWearBoard(args[0]);

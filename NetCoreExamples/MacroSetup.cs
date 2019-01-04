@@ -9,11 +9,7 @@ using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class MacroSetup {
-        static void Main(string[] args) {
-            MainAsync(args).Wait();
-        }
-
-        private static async Task MainAsync(string[] args) {
+        static async Task Setup(string[] args) {
             Console.WriteLine($"Connecting to {args[0]}...");
             var metawear = Application.GetMetaWearBoard(args[0]);
             await metawear.InitializeAsync();
