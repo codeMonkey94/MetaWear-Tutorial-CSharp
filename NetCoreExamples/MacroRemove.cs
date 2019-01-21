@@ -1,14 +1,11 @@
 ﻿using MbientLab.MetaWear.Core;
-using MbientLab.MetaWear.NetStandard;
 using System;
 using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class MacroRemove {
-        static async Task Setup(string[] args) {
-            Console.WriteLine($"Connecting to {args[0]}...");
-            var metawear = Application.GetMetaWearBoard(args[0]);
-            await metawear.InitializeAsync();
+        static async Task RunAsync(string[] args) {
+            var metawear = await ScanConnect.Connect(args[0]);
 
             Console.WriteLine("Removing macros");
             metawear.GetModule<IMacro>().EraseAll();

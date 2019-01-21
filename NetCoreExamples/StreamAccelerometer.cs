@@ -1,59 +1,76 @@
 ﻿using MbientLab.MetaWear;
 using MbientLab.MetaWear.Core;
 using MbientLab.MetaWear.Data;
-using MbientLab.MetaWear.NetStandard;
 using MbientLab.MetaWear.Sensor;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class StreamAccelerometer {
-        static async Task Setup(string[] args) {
-            var metawears = new List<IMetaWearBoard>();
-            var samples = new Dictionary<IMetaWearBoard, uint>();
+        internal static async Task<IMetaWearBoard> PrepareBleConn(string mac) {
+            var m = await ScanConnect.Connect(mac);
 
-            foreach(var _ in args) {
-                var m = Application.GetMetaWearBoard(_);
-                await m.InitializeAsync();
+            // Adjust the max connection interval to support the 100Hz stream
+            m.GetModule<ISettings>()?.EditBleConnParams(maxConnInterval: 7.5f);
+            await Task.Delay(1500);
 
-                Console.WriteLine($"Connected to {_}");
-                metawears.Add(m);
-                samples.Add(m, 0);
-            }
+            Console.WriteLine($"Connected to {mac}");
+            return m;
+        }
 
-            foreach (var m in metawears) {
-                var settings = m.GetModule<ISettings>();
-                settings.EditBleConnParams(maxConnInterval: 7.5f);
-                await Task.Delay(1500);
+        internal static async Task Setup(IMetaWearBoard metawear, Dictionary<IMetaWearBoard, uint> samples) {
+            var acc = metawear.GetModule<IAccelerometer>();
 
-                var acc = m.GetModule<IAccelerometer>();
-                acc.Configure(odr: 100f, range: 16f);
-                await acc.Acceleration.AddRouteAsync(source => source.Stream(_ => {
-                    Console.WriteLine($"{m.MacAddress} -> {_.Value<Acceleration>()}");
-                    samples[m]++;
-                }));
-            }
+            // Set the data rate to 100Hz and data range to +/-16g, or closest valid values
+            acc.Configure(odr: 100f, range: 16f);
+            // Use data route framework to tell the MetaMotion to stream accelerometer data to the host device
+            // https://mbientlab.com/csdocs/latest/data_route.html#stream
+            await acc.Acceleration.AddRouteAsync(source => source.Stream(data => {
+                Console.WriteLine($"{metawear.MacAddress} -> {data.Value<Acceleration>()}");
+                samples[metawear]++;
+            }));
+        }
 
-            foreach(var m in metawears) {
-                var acc = m.GetModule<IAccelerometer>();
-                acc.Acceleration.Start();
-                acc.Start();
-            }
+        internal static void Start(IMetaWearBoard metawear) {
+            var acc = metawear.GetModule<IAccelerometer>();
+            // Start the acceleration data
+            acc.Acceleration.Start();
+            // Put accelerometer in active mode
+            acc.Start();
+        }
 
+        internal static Task Stop(IMetaWearBoard metawear) {
+            var acc = metawear.GetModule<IAccelerometer>();
+
+            // Put accelerometer back into standby mode
+            acc.Stop();
+            // Stop accelerationi data
+            acc.Acceleration.Stop();
+
+            // Have remote device close the connection
+            return metawear.GetModule<IDebug>().DisconnectAsync();
+        }
+
+        static async Task RunAsync(string[] args) {
+            var metawear = await PrepareBleConn(args[0]);
+
+            var samples = new Dictionary<IMetaWearBoard, uint> {
+                { metawear, 0 }
+            };
+
+            // Connect and prepare the BLE connection
+            await Setup(metawear, samples);
+            Start(metawear);
+
+            // Stream for 30
             await Task.Delay(30000);
 
-            await Task.WhenAll(metawears.Select(_ => {
-                var acc = _.GetModule<IAccelerometer>();
-                acc.Stop();
-                acc.Acceleration.Stop();
+            // Stop accelerometer and disconnect from the board
+            await Stop(metawear);
 
-                return _.GetModule<IDebug>().DisconnectAsync();
-            }));
-            
-            foreach(var _ in samples) {
-                Console.WriteLine($"{_.Key.MacAddress} -> {_.Value}");
+            foreach (var (k, v) in samples) {
+                Console.WriteLine($"{k.MacAddress} -> {v}");
             }
         }
     }

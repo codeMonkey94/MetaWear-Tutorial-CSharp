@@ -8,43 +8,68 @@ using MbientLab.MetaWear.NetStandard;
 
 namespace NetCoreExamples {
     class ScanConnect {
-        static async Task Setup(string[] args) {
-            int selection = -1;
-            List<ScanResult> devices = new List<ScanResult>();
+        static string ScanForMetaWear() {
+            var devices = new List<ScanResult>();
+            var seen = new HashSet<string>();
+            // Set a handler to process scanned devices     
+            Scanner.OnResultReceived = item => {
+                // Filter devices that do not advertise the MetaWear service or have already been seen
+                if (item.HasServiceUuid(Constants.METAWEAR_GATT_SERVICE.ToString()) && !seen.Contains(item.Mac)) {
+                    seen.Add(item.Mac);
 
-            while (selection == -1) {
-                var seen = new HashSet<string>();
-                devices = new List<ScanResult>();
-                Scanner.OnResultReceived = item => {
-                    if (item.HasServiceUuid(Constants.METAWEAR_GATT_SERVICE.ToString()) && !seen.Contains(item.Mac)) {
-                        seen.Add(item.Mac);
+                    Console.WriteLine($"[{devices.Count}] = {item.Mac} ({item.Name})");
+                    devices.Add(item);
+                }
+            };
 
-                        Console.WriteLine($"[{devices.Count}] = {item.Mac} ({item.Name}) ");
-                        devices.Add(item);
-                    }
-                };
-                
+            int selection;
+            do {
+                seen.Clear();
+                devices.Clear();
+
                 Console.WriteLine("Scanning for devices...");
                 Scanner.Start();
-                await Task.Delay(10000);
+
+                Console.WriteLine("Press [Enter] to stop the scan");
+                Console.ReadLine();
                 Scanner.Stop();
 
                 Console.Write("Select your device (-1 to rescan): ");
                 selection = int.Parse(Console.ReadLine());
+                // Repeat until user selects a device
+            } while (selection == -1);
+
+            // return selected mac address
+            return devices[selection].Mac;
+        }
+        
+        internal static async Task<IMetaWearBoard> Connect(string mac, int retries = 2) {
+            var metawear = Application.GetMetaWearBoard(mac);
+
+            Console.WriteLine($"Connecting to {metawear.MacAddress}...");
+            do {
+                try {
+                    await metawear.InitializeAsync();
+                    retries = -1;
+                } catch (Exception e) {
+                    Console.WriteLine($"Error connecting to {metawear.MacAddress}, retrying...");
+                    Console.WriteLine(e);
+                    retries--;
+                }
+            } while (retries > 0);
+
+            if (retries == 0) {
+                throw new ApplicationException($"Failed to connect to {metawear.MacAddress} after {retries + 1} attempts");
+            } else {
+                Console.WriteLine($"Connected to {metawear.MacAddress}");
+                return metawear;
             }
+        }
 
-            if (selection >= 0) {
-                var metawear = Application.GetMetaWearBoard(devices[selection].Mac);
-
-                Console.WriteLine($"Connecting to {devices[selection].Mac}...");
-                await metawear.InitializeAsync();
-
-                Console.WriteLine($"Device information: {await metawear.ReadDeviceInformationAsync()}");
-                await Task.Delay(5000);
-
-                await metawear.DisconnectAsync();
-                Console.WriteLine("Disconnected");
-            }
+        static async Task RunAsync(string[] args) {
+            var metawear = await Connect(ScanForMetaWear());
+            Console.WriteLine($"Device information: {await metawear.ReadDeviceInformationAsync()}");
+            await metawear.DisconnectAsync();
         }
     }
 }

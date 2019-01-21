@@ -1,14 +1,11 @@
 ﻿using MbientLab.MetaWear.Core;
-using MbientLab.MetaWear.NetStandard;
 using System;
 using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class AnonymousRoutes {
-        static async Task Setup(string[] args) {
-            Console.WriteLine($"Connecting to {args[0]}...");
-            var metawear = Application.GetMetaWearBoard(args[0]);
-            await metawear.InitializeAsync();
+        static async Task RunAsync(string[] args) {
+            var metawear = await ScanConnect.Connect(args[0]);
 
             Console.WriteLine("Creating anonymous routes");
             metawear.GetModule<ISettings>().EditBleConnParams(maxConnInterval: 7.5f);
@@ -19,7 +16,7 @@ namespace NetCoreExamples {
             logging.Stop();
 
             Console.WriteLine($"{routes.Count} active loggers discovered");
-            foreach(var r in routes) {
+            foreach (var r in routes) {
                 r.Subscribe(_ =>
                     Console.WriteLine($"identifier: {r.Identifier}, time: {_.FormattedTimestamp}, data: [{BitConverter.ToString(_.Bytes).ToLower().Replace("-", ", 0x")}]")
                 );
