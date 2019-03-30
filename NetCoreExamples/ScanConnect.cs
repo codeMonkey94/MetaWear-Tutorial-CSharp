@@ -8,7 +8,7 @@ using MbientLab.MetaWear.NetStandard;
 
 namespace NetCoreExamples {
     class ScanConnect {
-        static string ScanForMetaWear() {
+        public string ScanForMetaWear() {
             var devices = new List<ScanResult>();
             var seen = new HashSet<string>();
             // Set a handler to process scanned devices     
@@ -66,10 +66,10 @@ namespace NetCoreExamples {
             }
         }
 
-        static async Task RunAsync(string[] args) {
+       /* static async Task RunAsync(string[] args) {
             var metawear = await Connect(ScanForMetaWear());
             Console.WriteLine($"Device information: {await metawear.ReadDeviceInformationAsync()}");
             await metawear.DisconnectAsync();
-        }
+        }*/
     }
 }

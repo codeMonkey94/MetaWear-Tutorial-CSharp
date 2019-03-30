@@ -10,11 +10,11 @@ namespace NetCoreExamples {
 
             var led = metawear.GetModule<ILed>();
             // Set a solid pattern for the green led
-            led.EditPattern(Color.Green, Pattern.Solid);
+            led.EditPattern(Color.Green, Pattern.Pulse);
             // Play pattern
             led.Play();
 
-            await Task.Delay(5000);
+            await Task.Delay(10000);
             // Stop and clear pattern
             led.Stop(true);
 

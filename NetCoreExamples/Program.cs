@@ -2,11 +2,17 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using static MbientLab.Warble.Scanner;
 
 namespace NetCoreExamples {
     class Program {
         static void Main(string[] args) {
-            MainAsync(args).Wait();
+            ScanConnect scanner = new ScanConnect();
+            string myDevice = scanner.ScanForMetaWear();//LOOKS FOR DEVICE
+            Console.Write("You selected device: " + myDevice);
+             
+            MainAsync(args);
+            Console.Read();
         }
 
         private static async Task MainAsync(string[] args) {
