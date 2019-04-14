@@ -10,9 +10,20 @@ using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class LedController {
-        internal static async Task Setup(IMetaWearBoard metawear) {
-            var mwSwitch = metawear.GetModule<ISwitch>();
-            await mwSwitch.State.AddRouteAsync(source => {
+        internal static async Task Setup(IMetaWearBoard metawear) {            
+            var colors = Enum.GetValues(typeof(Color)).Cast<Color>();
+            var led = metawear.GetModule<ILed>();
+           
+
+            foreach (var c in colors)
+            {
+                    led.Stop(true);
+                    led.EditPattern(c, Pattern.Pulse);
+                    led.Play();
+               
+            }
+            //var mwSwitch = metawear.GetModule<ISwitch>();
+            /*await mwSwitch.State.AddRouteAsync(source => {
                 var led = metawear.GetModule<ILed>();
                 var count = source.Filter(Comparison.Eq, 1).Count().Name("press-count");
 
@@ -24,11 +35,11 @@ namespace NetCoreExamples {
                 foreach (var c in colors) {
                     count.Filter(Comparison.Eq, ((int) c) + 1).React(token => {
                         led.Stop(true);
-                        led.EditPattern(c, Pattern.Solid);
+                        led.EditPattern(c, Pattern.Blink);
                         led.Play();
                     });
                 }
-            });
+            });*/
         }
 
         static async Task RunAsync(string[] args) {

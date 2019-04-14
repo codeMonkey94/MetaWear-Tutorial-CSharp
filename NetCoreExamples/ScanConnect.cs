@@ -8,7 +8,7 @@ using MbientLab.MetaWear.NetStandard;
 
 namespace NetCoreExamples {
     class ScanConnect {
-        public string ScanForMetaWear() {
+        public string ScanForMetaWear() {//SHOULD BE STATIC STRING
             var devices = new List<ScanResult>();
             var seen = new HashSet<string>();
             // Set a handler to process scanned devices     
@@ -43,7 +43,7 @@ namespace NetCoreExamples {
             return devices[selection].Mac;
         }
         
-        internal static async Task<IMetaWearBoard> Connect(string mac, int retries = 2) {
+        public static async Task<IMetaWearBoard> Connect(string mac, int retries = 2) {
             var metawear = Application.GetMetaWearBoard(mac);
 
             Console.WriteLine($"Connecting to {metawear.MacAddress}...");

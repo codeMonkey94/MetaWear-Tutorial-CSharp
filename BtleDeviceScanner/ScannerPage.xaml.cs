@@ -129,7 +129,7 @@ namespace MbientLab.BtleDeviceScanner {
                     Content = "Please wait while the app initializes the API"
                 };
 
-                initPopup.ShowAsync();
+                await initPopup.ShowAsync();
                 var board = MbientLab.MetaWear.Win10.Application.GetMetaWearBoard(item);
                 await board.InitializeAsync();
                 initPopup.Hide();
