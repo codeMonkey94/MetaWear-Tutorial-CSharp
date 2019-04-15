@@ -14,7 +14,7 @@ namespace NetCoreExamples {
             // Play pattern
             led.Play();
 
-            await Task.Delay(10000);
+            await Task.Delay(3000);
             // Stop and clear pattern
             led.Stop(true);
 
