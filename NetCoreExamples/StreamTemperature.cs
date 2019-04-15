@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetCoreExamples {
     class StreamTemperature {
-        static async Task<IScheduledTask> Setup(IMetaWearBoard metawear) {
+        public static async Task<IScheduledTask> Setup(IMetaWearBoard metawear) {
             var temperature = metawear.GetModule<ITemperature>();
             var thermistor = temperature.FindSensors(SensorType.PresetThermistor)[0];
 
