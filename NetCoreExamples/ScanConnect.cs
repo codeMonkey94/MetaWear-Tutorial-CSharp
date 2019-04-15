@@ -66,10 +66,6 @@ namespace NetCoreExamples {
             }
         }
 
-       /* static async Task RunAsync(string[] args) {
-            var metawear = await Connect(ScanForMetaWear());
-            Console.WriteLine($"Device information: {await metawear.ReadDeviceInformationAsync()}");
-            await metawear.DisconnectAsync();
-        }*/
+     
     }
 }
