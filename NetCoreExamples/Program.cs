@@ -7,18 +7,23 @@ using static MbientLab.Warble.Scanner;
 namespace NetCoreExamples {
     class Program {
         static void Main(string[] args) {
-            ScanConnect scanner = new ScanConnect();
-            string myDevice = scanner.ScanForMetaWear();//LOOKS FOR DEVICE
-            Console.Write("You selected device: " + myDevice);
-             
-            MainAsync(args);
-            Console.Read();
+            MainAsync(args[]);            
         }
 
         private static async Task MainAsync(string[] args) {
-            var type = Type.GetType(args[0]);
-            await (Task) type.GetMethod("RunAsync", BindingFlags.NonPublic | BindingFlags.Static)
-                .Invoke(null, new object[] { args.TakeLast(args.Length - 1).ToArray() });
+            //SEARCH FOR DEVICE:
+            ScanConnect scanner = new ScanConnect();//PROBABLY NOT NEED; USE AN AWAIT AS WELL
+            string myDevice = scanner.ScanForMetaWear();//LOOKS FOR DEVICE
+            Console.Write("You selected device: " + myDevice + "\n");//DISPLAY THE SELECTED DEVICE
+            //CONNECT TO DEVICE:
+            var board = await ScanConnect.connect(myDevice, 2);//RET A TASK<METAWEARBOARD>
+            //TEST CONNECTIVITY WITH BEACON FLASH OF LED:
+            var ledTest = await LedController.setup(board);
+            //TEST TEMPERATURE READINGS:
+            var tempTest = await StreamTemperature.setup(board);
+            //DISCONNECT FROM DEVICE:
+            //CLEAR MACROS               
+            Console.Read();
         }
     }
 }
