@@ -11,24 +11,14 @@ using System.Threading.Tasks;
 namespace NetCoreExamples {
     class LedController {
         internal static async Task Setup(IMetaWearBoard metawear) {
-            var mwSwitch = metawear.GetModule<ISwitch>();
-            await mwSwitch.State.AddRouteAsync(source => {
-                var led = metawear.GetModule<ILed>();
-                var count = source.Filter(Comparison.Eq, 1).Count().Name("press-count");
-
-                var colors = Enum.GetValues(typeof(Color)).Cast<Color>();
-                count.Filter(Comparison.Eq, colors.Count() + 1).React(token => {
-                    led.Stop(true);
-                    metawear.GetModule<IDataProcessor>().Edit<ICounterEditor>("press-count").Reset();
-                });
+            var colors = Enum.GetValues(typeof(Color)).Cast<Color>();
+            var led = metawear.GetModule<ILed>();//CREATES A HANDLE INTO LED CLASS
                 foreach (var c in colors) {
-                    count.Filter(Comparison.Eq, ((int) c) + 1).React(token => {
                         led.Stop(true);
-                        led.EditPattern(c, Pattern.Solid);
+                        led.EditPattern(c, Pattern.Pulse);//CHANGE PATTERN
                         led.Play();
-                    });
                 }
-            });
+
         }
 
         static async Task RunAsync(string[] args) {
