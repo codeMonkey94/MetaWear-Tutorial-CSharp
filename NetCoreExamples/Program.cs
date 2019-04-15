@@ -18,9 +18,9 @@ namespace NetCoreExamples {
             //CONNECT TO DEVICE:
             var board = await ScanConnect.connect(myDevice, 2);//RET A TASK<METAWEARBOARD>
             //TEST CONNECTIVITY WITH BEACON FLASH OF LED:
-            var ledTest = await LedController.setup(board);
+             await LedController.setup(board);
             //TEST TEMPERATURE READINGS:
-            var tempTest = await StreamTemperature.setup(board);
+            await StreamTemperature.setup(board);
             //DISCONNECT FROM DEVICE:
             //CLEAR MACROS               
             Console.Read();
