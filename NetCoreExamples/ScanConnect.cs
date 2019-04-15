@@ -43,7 +43,7 @@ namespace NetCoreExamples {
             return devices[selection].Mac;
         }
         
-        internal static async Task<IMetaWearBoard> Connect(string mac, int retries = 2) {
+        public static async Task<IMetaWearBoard> Connect(string mac, int retries = 2) {
             var metawear = Application.GetMetaWearBoard(mac);
 
             Console.WriteLine($"Connecting to {metawear.MacAddress}...");
